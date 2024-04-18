@@ -23,40 +23,7 @@ public class Game
     {
         return board.clickedMine;
     }
-
-    private (int y, int x, int action) PlayerInput()
-    {
-        Console.WriteLine("Choose the x coordinate to alter (starting with 1)");
-        int y = (Convert.ToInt32(Console.ReadLine()) - 1);
-        Console.WriteLine("Choose the y coordinate to alter (starting with 1)");
-        int x = (Convert.ToInt32(Console.ReadLine()) - 1);
-        Console.WriteLine("Choose the action to perform: 1. Reveal 2. Flag");
-        int action = Convert.ToInt32(Console.ReadLine());
-        
-        return (y, x, action);
-    }
-
-    private bool IsActionToggle(int action)
-    {
-        if (action == 2)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool IsActionReveal(int action)
-    {
-        if (action == 1)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-
+    
     public void Move()
     {
         board.PrintBoard();
@@ -79,10 +46,26 @@ public class Game
         Console.WriteLine("");
     }
 
+    private (int y, int x, int action) PlayerInput()
+    {
+        return ConsoleTypingMove();
+    }
+
+    private (int y, int x, int action) ConsoleTypingMove()
+    {
+        Console.WriteLine("Choose the x coordinate to alter (starting with 1)");
+        int y = (Convert.ToInt32(Console.ReadLine()) - 1);
+        Console.WriteLine("Choose the y coordinate to alter (starting with 1)");
+        int x = (Convert.ToInt32(Console.ReadLine()) - 1);
+        Console.WriteLine("Choose the action to perform: 1. Reveal 2. Flag");
+        int action = Convert.ToInt32(Console.ReadLine());
+        
+        return (y, x, action);
+    }
+
     private void FirstReveal(int a, int b)
     {
-        Console.WriteLine("It's your first move, so it'd be silly to make a flag!. Type 1 to reveal.");
-        int action = Convert.ToInt32(Console.ReadLine());
+        int action = PlayerInputFirstMove();
         if (action == 1)
         {
             board.RevealCell(a, b);
@@ -91,8 +74,7 @@ public class Game
         {
             while (action != 1)
             {
-                Console.WriteLine(":( It won't work until you type 1)");
-                action = Convert.ToInt32(Console.ReadLine());
+                action = PlayerFirstInputCheck();
                 if (action == 1)
                 {
                     board.RevealCell(a, b);
@@ -100,6 +82,56 @@ public class Game
             }
         }
     }
+
+    private int ConsoleTypingFirstMove()
+    {
+        Console.WriteLine("It's your first move, so it'd be silly to make a flag!. Type 1 to reveal.");
+        int action = Convert.ToInt32(Console.ReadLine());
+        return action;
+
+    }
+
+    private int PlayerInputFirstMove()
+    {
+        return ConsoleTypingFirstMove();
+    }
+    
+    private int PlayerFirstInputCheck()
+    {
+        return ConsoleTypingFirstMoveCheck();
+    }
+    
+    private int ConsoleTypingFirstMoveCheck()
+    {
+        Console.WriteLine(":( It won't work until you type 1)");
+        int action = Convert.ToInt32(Console.ReadLine());
+        return action;
+    }
+    
+    private bool IsActionToggle(int action)
+    {
+        if (action == 2)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool IsActionReveal(int action)
+    {
+        if (action == 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+   
+
+   
 
 
     private void GameGoing()
@@ -134,14 +166,26 @@ public class Game
         }
     }
 
-    public (int, int) MakeSize()
+    public (int x, int y) MakeSize()
+    {
+        (int x, int y) = PlayerInputSize();
+        return (x, y);
+    }
+
+    public (int x, int y) PlayerInputSize()
+    {
+        (int x, int y) = ConsoleTypingSize();
+        return (x, y);
+    }
+
+    public (int x, int y) ConsoleTypingSize()
     {
         Console.WriteLine("Choose the size of your board)");
-        int x = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Choose the number of mines)");
-        int y = Convert.ToInt32(Console.ReadLine());
-        Console.WriteLine("Game has started");
-        return (x, y);
+    int x = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Choose the number of mines)");
+    int y = Convert.ToInt32(Console.ReadLine());
+    Console.WriteLine("Game has started");
+    return (x, y);
     }
 
     public (int, int) MakeAFirstMove()
